@@ -23,7 +23,13 @@ export function Header() {
           <Link href="/catalog" className="hover:text-primary transition-colors">
             Каталог
           </Link>
-          <Link href="/#contact" className="hover:text-primary transition-colors">
+          <Link href="/suppliers" className="hover:text-primary transition-colors">
+            Поставщикам
+          </Link>
+          <Link href="/buyers" className="hover:text-primary transition-colors">
+            Покупателям
+          </Link>
+          <Link href="/contacts" className="hover:text-primary transition-colors">
             Контакты
           </Link>
         </nav>
