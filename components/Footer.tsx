@@ -10,6 +10,32 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col gap-4">
+          <h3 className="font-semibold text-primary">Навигация</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <a href="/catalog" className="hover:text-primary transition-colors">
+                Каталог
+              </a>
+            </li>
+            <li>
+              <a href="/suppliers" className="hover:text-primary transition-colors">
+                Поставщикам
+              </a>
+            </li>
+            <li>
+              <a href="/buyers" className="hover:text-primary transition-colors">
+                Покупателям
+              </a>
+            </li>
+            <li>
+              <a href="/3pl-logistics" className="hover:text-primary transition-colors">
+                Услуги
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col gap-4">
           <h3 className="font-semibold text-primary">Контакты</h3>
           <ul className="space-y-2 text-sm">
             <li>+7 (999) 000-00-00</li>
