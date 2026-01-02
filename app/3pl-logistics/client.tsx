@@ -1,0 +1,194 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { useModal } from "@/components/providers/ModalProvider";
+import { ThreePLPageData, BenefitItem, StageItem } from "@/types/strapi";
+import { getStrapiMedia } from "@/lib/strapi";
+import { 
+  ArrowRight, 
+  PackageCheck, 
+  Warehouse, 
+  Settings, 
+  Truck, 
+  Undo2, 
+  ShieldCheck, 
+  Clock, 
+  Banknote,
+  Cpu,
+  LucideIcon
+} from "lucide-react";
+
+// Icon mapping
+const ICON_MAP: Record<string, LucideIcon> = {
+  PackageCheck,
+  Warehouse,
+  Settings,
+  Truck,
+  Undo2,
+  ShieldCheck,
+  Clock,
+  Banknote,
+  Cpu,
+};
+
+export default function Client3PLPage({ data }: { data: ThreePLPageData }) {
+  const { openModal } = useModal();
+
+  // Helper to safely get icon
+  const getIcon = (iconName: string) => {
+    const Icon = ICON_MAP[iconName];
+    // Return the specific icon if found, otherwise return the default Settings icon
+    return Icon || Settings; 
+  };
+
+  const heroImageUrl = data.hero.backgroundImage?.data?.attributes?.url 
+    ? getStrapiMedia(data.hero.backgroundImage.data.attributes.url)
+    : "/images/Hero3pl.png";
+
+  return (
+    <div className="flex flex-col gap-20 pb-20">
+      {/* Hero Section */}
+      <section className="relative flex min-h-[600px] items-center overflow-hidden pt-20 pb-20 md:pt-32 md:pb-32">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroImageUrl || "/images/Hero3pl.png"}
+            alt={data.hero.backgroundImage?.data?.attributes?.alternativeText || "Hero Background"}
+            className="h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/70 to-transparent" />
+        </div>
+
+        <div className="container relative z-10 mx-auto px-4 md:px-6">
+          <div className="max-w-2xl text-left">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-6 text-4xl font-bold leading-tight text-primary md:text-5xl lg:text-6xl"
+            >
+              {data.hero.title}
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="mb-8 text-xl font-medium text-gray-800"
+            >
+              {data.hero.description}
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <button
+                onClick={openModal}
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-primary/90 hover:shadow-lg"
+              >
+                Рассчитать стоимость
+                <ArrowRight className="h-5 w-5" />
+              </button>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stages Section */}
+      <section className="container mx-auto px-4 md:px-6">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">{data.stagesTitle}</h2>
+          <p className="mt-4 text-lg text-gray-600">{data.stagesDescription}</p>
+        </div>
+
+        <div className="relative">
+          {/* Connecting line for desktop */}
+          <div className="absolute left-[50%] top-0 bottom-0 hidden w-0.5 bg-gray-200 md:block transform -translate-x-1/2" />
+
+          <div className="space-y-12 md:space-y-24">
+            {data.stages.map((stage, index) => {
+              const Icon = getIcon(stage.icon);
+              return (
+                <motion.div
+                  key={stage.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  className={`flex flex-col gap-8 md:flex-row items-center ${
+                    index % 2 === 0 ? "md:flex-row-reverse" : ""
+                  }`}
+                >
+                  <div className="flex-1 text-center md:text-left">
+                    <div className={`flex flex-col gap-4 ${index % 2 === 0 ? "md:items-start" : "md:items-end md:text-right"}`}>
+                      <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-accent md:hidden">
+                        <Icon size={32} />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900">{stage.title}</h3>
+                      <p className="text-gray-600 leading-relaxed max-w-md">{stage.description}</p>
+                    </div>
+                  </div>
+
+                  <div className="relative flex items-center justify-center z-10">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white border-4 border-blue-50 shadow-sm text-accent hidden md:flex">
+                      <Icon size={28} />
+                    </div>
+                  </div>
+
+                  <div className="flex-1" />
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="bg-primary py-20 text-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl font-bold md:text-4xl">{data.benefitsTitle}</h2>
+            <p className="mt-4 text-lg text-blue-100">{data.benefitsDescription}</p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {data.benefits.map((benefit, index) => {
+              const Icon = getIcon(benefit.icon);
+              return (
+                <motion.div
+                  key={benefit.id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="rounded-2xl bg-white/10 p-6 backdrop-blur-sm"
+                >
+                  <div className="mb-4 text-cyan-300">
+                    <Icon size={32} />
+                  </div>
+                  <h3 className="mb-2 text-xl font-bold">{benefit.title}</h3>
+                  <p className="text-sm text-blue-100">{benefit.description}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 md:px-6">
+        <div className="rounded-3xl bg-gray-50 p-8 text-center md:p-16">
+          <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">{data.ctaTitle}</h2>
+          <p className="mb-8 mx-auto max-w-2xl text-lg text-gray-600">
+            {data.ctaDescription}
+          </p>
+          <button
+            onClick={openModal}
+            className="inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-cyan-600"
+          >
+            {data.ctaButtonText}
+            <ArrowRight className="h-5 w-5" />
+          </button>
+        </div>
+      </section>
+    </div>
+  );
+}
